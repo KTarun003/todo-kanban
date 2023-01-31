@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using CommonUI.Data;
+using Syncfusion.Blazor;
 
 namespace Web
 {
@@ -18,8 +19,9 @@ namespace Web
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
+            builder.Services.AddSyncfusionBlazor();
             builder.Services.AddSingleton<WeatherForecastService>();
-
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Environment.GetEnvironmentVariable("SYNCFUSION_LICENSE_KEY"));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
