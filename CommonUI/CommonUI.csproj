@@ -11,6 +11,12 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Syncfusion.Blazor.Grid" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Kanban" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.4.0.44" />
+  </ItemGroup>
+
 
 
 </Project>

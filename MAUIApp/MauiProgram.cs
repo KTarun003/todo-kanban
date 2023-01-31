@@ -1,6 +1,7 @@
 ﻿using CommonUI.Data;
 using Microsoft.AspNetCore.Components.WebView.Maui;
 using Microsoft.Extensions.Configuration;
+using Syncfusion.Blazor;
 
 namespace MAUIApp
 {
@@ -17,10 +18,12 @@ namespace MAUIApp
                 });
 
             builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddSyncfusionBlazor();
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Environment.GetEnvironmentVariable("SYNCFUSION_LICENSE_KEY"));
 #if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
-                       
+
             builder.Services.AddSingleton<WeatherForecastService>();
 
             return builder.Build();
