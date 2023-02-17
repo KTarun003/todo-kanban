@@ -1,0 +1,125 @@
+﻿@page "/upsert/{id?}/{listId:int?}"
+@inject ItemsService itemsService
+
+
+
+<div class="row justify-content-center mt-5">
+    <SfToast @ref="@ToastObj" Title="Alert" Content="@ToastContent" CssClass="e-toast-success">
+        <ToastEvents OnClick="@OnClickHandler"></ToastEvents>
+        <ToastPosition X="Right" Y="Top"></ToastPosition>
+    </SfToast>
+    <div class="col-md-6">
+        <div class="card mt-5 mb-3 bg-secondary text-white">
+             <EditForm Model="@item" OnSubmit="SaveItem">
+                <div class="card-header">
+                    <div class="form-group" align="right">
+                        <SfColorPicker  Value="@item.Color" ModeSwitcher="false" ShowButtons="false" Mode="ColorPickerMode.Palette" ValueChange="@ColorChanged"></SfColorPicker>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-12">List</label>
+                            <div class="col">
+                                <InputSelect class="form-control" @bind-Value="item.ListId">
+                                    <option value="0">Personal</option>
+                                    <option value="1">Work</option>
+                                </InputSelect>
+                                <ValidationMessage For="@(() => item.ListId)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-12">Title</label>
+                            <div class="col">
+                                <InputText class="form-control" @bind-Value="item.Title" />
+                                <ValidationMessage For="@(() => item.Title)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-12">Related To</label>
+                            <div class="col">
+                                <InputText class="form-control" @bind-Value="item.RelatedTo" />
+                                <ValidationMessage For="@(() => item.RelatedTo)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-12">Notes</label>
+                            <div class="col">
+                                <InputTextArea class="form-control" @bind-Value="item.Notes" />
+                                <ValidationMessage For="@(() => item.Notes)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-12">Tags</label>
+                            <div class="col">
+                                <InputText class="form-control" @bind-Value="item.Tags" />
+                                <ValidationMessage For="@(() => item.Tags)" />
+                            </div>
+                        </div>
+                    
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-12">Priority</label>
+                            <div class="col">
+                                <InputSelect class="form-control" @bind-Value="item.Priority">
+                                    <option value="1">Normal</option>
+                                    <option value="2">High</option>
+                                    <option value="3">Urgent</option>
+                                    <option value="0">Low</option>
+                                </InputSelect>
+                                <ValidationMessage For="@(() => item.Priority)" />
+                            </div>
+                        </div>
+
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    SfToast? ToastObj;
+    private string ToastContent = "";
+    private Item item = new Item();
+    [Parameter]
+    public string id { get; set; } = string.Empty;
+    [Parameter]
+    public int listId { get; set; } = 0;
+
+    protected override void OnInitialized()
+    {
+        if(id != string.Empty)
+        {
+            item = itemsService.GetItems(listId).Where(x => x.Id == id).FirstOrDefault();
+            if (item == null)
+                item = new Item();
+        }
+    }
+
+    private void ColorChanged(ColorPickerEventArgs args)
+    {
+        item.Color = args.CurrentValue.Hex;
+    }
+
+    private async void SaveItem()
+    {
+        item.CardTags = item.Tags.Split(",").ToList();
+        if(string.IsNullOrEmpty(item.Status))
+            item.Status = "Open";
+        itemsService.Save(item);
+        this.ToastContent = "Todo Saved Successfully";
+        await Task.Delay(100);
+        await this.ToastObj.ShowAsync();
+        item = new Item();        
+    }
+
+    public void OnClickHandler(ToastClickEventArgs args)
+    {
+        args.ClickToClose = true;
+    }
+}

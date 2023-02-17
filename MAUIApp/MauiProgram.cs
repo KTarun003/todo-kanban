@@ -1,4 +1,4 @@
-﻿using CommonUI.Data;
+﻿using DataAccess.Services;
 using Microsoft.AspNetCore.Components.WebView.Maui;
 using Microsoft.Extensions.Configuration;
 using Syncfusion.Blazor;
@@ -16,7 +16,7 @@ namespace MAUIApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
-
+            builder.Services.AddTransient<ItemsService>();
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddSyncfusionBlazor();
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Environment.GetEnvironmentVariable("SYNCFUSION_LICENSE_KEY"));
@@ -24,7 +24,6 @@ namespace MAUIApp
 		builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
 
-            builder.Services.AddSingleton<WeatherForecastService>();
 
             return builder.Build();
         }

@@ -1,31 +1,51 @@
 ﻿@page "/fetchdata"
 
-<PageTitle>Weather forecast</PageTitle>
+@inject ItemsService itemsService
 
-@using CommonUI.Data
-@inject WeatherForecastService ForecastService
+<PageTitle>Tasks</PageTitle>
+
 
 <div class="text-white">
-    <h1>Weather forecast</h1>
-
-    <p>This component demonstrates fetching data from a service.</p>
+    <h1>Personal Tasks</h1>
 </div>
 
-<SfGrid DataSource="@forecasts" AllowPaging="true" AllowSorting="true" AllowGrouping="true">
- <GridPageSettings PageSize="5"></GridPageSettings>
-   <GridColumns>
-     <GridColumn Field=@nameof(WeatherForecast.TemperatureC) HeaderText="Celsius" TextAlign="TextAlign.Right" Width="120"></GridColumn>
-     <GridColumn Field=@nameof(WeatherForecast.TemperatureF) HeaderText="Farenheit" TextAlign="TextAlign.Right" Width="150"></GridColumn>
-     <GridColumn Field=@nameof(WeatherForecast.Date) HeaderText="Date" Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Right" Width="130"></GridColumn>
-     <GridColumn Field=@nameof(WeatherForecast.Summary) HeaderText="Summary" Format="C2" TextAlign="TextAlign.Right" Width="120"></GridColumn>
-   </GridColumns>
+<SfGrid DataSource="@personalItems" AllowPaging="true" AllowSorting="true" AllowGrouping="true" >
+     <GridPageSettings PageSize="5"></GridPageSettings>
+       <GridColumns>
+         <GridColumn Field=@nameof(Item.Title) HeaderText="Title" TextAlign="TextAlign.Center" Width="120"></GridColumn>
+         <GridColumn Field=@nameof(Item.Status) HeaderText="Status" TextAlign="TextAlign.Center" Width="50"></GridColumn>
+         <GridColumn Field=@nameof(Item.Notes) HeaderText="Notes" Format="C2" TextAlign="TextAlign.Center" Width="120"></GridColumn>
+         <GridColumn Field=@nameof(Item.Tags) HeaderText="Tags" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+         <GridColumn Field=@nameof(Item.Color) HeaderText="Type" TextAlign="TextAlign.Center" Width="50"></GridColumn>
+         @*<GridColumn Field=@nameof(Item.Date) HeaderText="Date" Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Right" Width="130"></GridColumn>*@
+       </GridColumns>
+</SfGrid>
+
+<div class="text-white" style="margin-top:5rem">
+    <h1>Work Tasks</h1>
+</div>
+
+<SfGrid DataSource="@workItems" AllowPaging="true" AllowSorting="true" AllowGrouping="true" >
+     <GridPageSettings PageSize="5"></GridPageSettings>
+       <GridColumns>
+         <GridColumn Field=@nameof(Item.Title) HeaderText="Title" TextAlign="TextAlign.Center" Width="120"></GridColumn>
+         <GridColumn Field=@nameof(Item.Status) HeaderText="Status" TextAlign="TextAlign.Center" Width="50"></GridColumn>
+         <GridColumn Field=@nameof(Item.Notes) HeaderText="Notes" Format="C2" TextAlign="TextAlign.Center" Width="120"></GridColumn>
+         <GridColumn Field=@nameof(Item.Tags) HeaderText="Tags" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+         <GridColumn Field=@nameof(Item.Color) HeaderText="Type" TextAlign="TextAlign.Center" Width="50"></GridColumn>
+        @*<GridColumn Field=@nameof(Item.Date) HeaderText="Date" Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Right" Width="130"></GridColumn>*@
+       </GridColumns>
 </SfGrid>
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private List<Item>? personalItems;
+    private List<Item>? workItems;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        personalItems = itemsService.GetItems(0);
+        workItems = itemsService.GetItems(1);
     }
+
+    
 }

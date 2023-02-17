@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
-using CommonUI.Data;
 using Syncfusion.Blazor;
+using DataAccess.Services;
 
 namespace Web
 {
@@ -20,7 +20,7 @@ namespace Web
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             builder.Services.AddSyncfusionBlazor();
-            builder.Services.AddSingleton<WeatherForecastService>();
+            builder.Services.AddTransient<ItemsService>();
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Environment.GetEnvironmentVariable("SYNCFUSION_LICENSE_KEY"));
             var app = builder.Build();
 
