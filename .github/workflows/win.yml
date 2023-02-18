@@ -43,16 +43,16 @@ jobs:
 
       - name: Build MAUIApp
         shell: pwsh
-        run: dotnet build src/MAUIApp -f net6.0-android -c Debug
+        run: dotnet build MAUIApp -f net6.0-android -c Release
 
       - name: Build WinUI3 Debug
-        run: msbuild src\todo-kanban.sln -restore -p:Configuration=Debug
+        run: msbuild todo-kanban.sln -restore -p:Configuration=Debug
 
       - name: Build WinUI3 Release
-        run: msbuild src\todo-kanban.sln -p:Configuration=Release
+        run: msbuild todo-kanban.sln -p:Configuration=Release
 
       - uses: actions/upload-artifact@v2
         with:
           name: artifacts-windows
           path: |
-            src\MAUIApp\bin\Debug\**\*-Signed.apk
+            MAUIApp\bin\Release\**\*-Signed.apk
